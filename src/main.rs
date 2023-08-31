@@ -10,7 +10,8 @@ use std::{
 use iter_tools::prelude::*;
 use rand::{seq::SliceRandom, thread_rng, RngCore};
 
-const ALGORITHM_VERSION: f64 = 4.419;
+// new scoring, introducing the special keys jntrnr hates
+const ALGORITHM_VERSION: f64 = 4.420;
 const MAX_SAMPLES_PER_CATEGORY: usize = 1000;
 const FAILED_TO_IMPROVE_LIMIT: usize = 1000;
 
@@ -47,7 +48,7 @@ const PINKIE_PENALTY: i64 = -5;
 const TWO_ROW_MOVE_PENALTY: i64 = -10;
 const SAME_FINGER_PENALTY: i64 = -5;
 
-const USE_QUADRUPLE_ROLL: bool = false;
+const USE_QUADRUPLE_ROLL: bool = true;
 
 // This will prevent using the ,./ keys
 const BOTTOM_RIGHT_PENALTY: i64 = -10000000;
@@ -93,6 +94,17 @@ impl Keyboard {
         }
     }
 
+    pub fn programmer_dvorak() -> Keyboard {
+        Keyboard {
+            name: "programmer dvorak".into(),
+            rows: vec![
+                ";,.pyfgcrl".into(),
+                "aoeuidhtns".into(),
+                "'qjkxbmwvz".into(),
+            ],
+        }
+    }
+
     pub fn colemak() -> Keyboard {
         Keyboard {
             name: "colemak".into(),
@@ -115,19 +127,19 @@ impl Keyboard {
         }
     }
 
-    // pub fn inas() -> Keyboard {
-    //     Keyboard {
-    //         name: "inas".into(),
-    //         rows: vec![
-    //             "pmfcqxluoy".into(),
-    //             "inasbkreht".into(),
-    //             "_vgdzjw___".into(),
-    //         ],
-    //     }
-    // }
+    pub fn inas() -> Keyboard {
+        Keyboard {
+            name: "inas".into(),
+            rows: vec![
+                "pmfcqxluoy".into(),
+                "inasbkreht".into(),
+                ";vgdzjw,./".into(),
+            ],
+        }
+    }
 
     pub fn random_layout() -> Keyboard {
-        let mut keys: Vec<u8> = "abcdefghijklmnopqrstuvwxyz____".into();
+        let mut keys: Vec<u8> = "abcdefghijklmnopqrstuvwxyz;,./".into();
 
         keys.shuffle(&mut thread_rng());
 
@@ -687,6 +699,8 @@ fn main() {
     let standard_keyboards = vec![
         Keyboard::qwerty(),
         Keyboard::dvorak(),
+        Keyboard::programmer_dvorak(),
+        Keyboard::inas(),
         Keyboard::colemak(),
         Keyboard::workman(),
     ];
